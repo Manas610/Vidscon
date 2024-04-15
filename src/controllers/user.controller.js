@@ -34,6 +34,7 @@ const registerUser = asyncHandler( async (req,res) => {
     }
 
     const existedUser = await User.findOne({
+        //$or => operator 
         $or: [{ username } , { password }] 
     })
 
