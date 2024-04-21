@@ -50,6 +50,7 @@ const registerUser = asyncHandler( async (req,res) => {
     if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
         coverImageLocalPath = req.files.coverImage[0].path
     }
+    //isArray checks if it has an array
 
     if(!avatarLocalPath){
         throw new ApiError(409 , "Avatar is required")
@@ -91,7 +92,7 @@ const loginUser = asyncHandler( async (req,res) => {
         throw new ApiError(400 , "username or email is required")
     }
 
-    const user = await User.findOne({
+    const user = await User.findOne({  //your custom methods will be available at user not Userghgfvcvc
         $or: [{email} , {username}]
     })
 
@@ -195,7 +196,7 @@ const refreshAccessToken = asyncHandler( async (req,res) => {
 const changeCurrentPassword = asyncHandler( async(req,res) => {
     const {oldPassword , newPassword} = req.body
 
-    const user = User.findById(req.user?._id)
+    const user = await User.findById(req.user?._id)
 
     const isOldPasswordValid = await user.isPasswordCorrect(oldPassword)
 
@@ -236,7 +237,7 @@ const updateAccountDetails = asyncHandler( async(req,res) => {
                 email
             }
         }, {
-            new: true
+            new: true   //returns after update information
         }
     ).select("-password")
 
@@ -253,6 +254,8 @@ const updateAvatar = asyncHandler( async(req,res) => {
     if(!avatarLocalPath){
         throw new ApiError(400 , "Avatar file missing")
     }
+
+    //TODO: delete old image
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
