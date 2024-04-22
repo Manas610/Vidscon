@@ -25,9 +25,11 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
 }
 
-const destroyFromCloudinary = async (cloudinaryFileId) => {
+const destroyFromCloudinary = async (cloudinaryFileURL) => {
     try {
-        const result = await cloudinary.uploader.destroy(cloudinaryFileId)
+        const cloudinaryFileId = cloudinaryFileURL.split('/').pop().split('.')[0]
+        const resourceType = cloudinaryFileURL.endsWith('.mp4') ? 'video' : 'image';
+        const result = await cloudinary.uploader.destroy(cloudinaryFileId, { resource_type: resourceType });
         return result
     } catch (error) {
         return null

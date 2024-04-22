@@ -256,8 +256,7 @@ const updateAvatar = asyncHandler( async(req,res) => {
     }
 
     const initUser = await User.findById(req.user._id)
-    const oldAvatarId = initUser.avatar.split('/').pop().split('.')[0]
-    destroyFromCloudinary(oldAvatarId)
+    destroyFromCloudinary(initUser.avatar)
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
